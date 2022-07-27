@@ -10,6 +10,7 @@ interface LogInState {}
 
 export class LogIn extends React.PureComponent<LogInProps, LogInState> {
   onLogin = () => {
+    alert('login')
     this.props.auth.login()
   }
 

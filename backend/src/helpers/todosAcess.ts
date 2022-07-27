@@ -16,18 +16,18 @@ export class TodoAccess {
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly todoTable = process.env.TODOS_TABLE,
     // private readonly todoTableIndex = process.env.TODOS_CREATED_AT_INDEX,
-    private readonly todoByUserIndex = process.env.TODOS_BY_USER_INDEX,
-    private readonly bucketName = process.env.ATTACHMENTS_S3_BUCKET,
+    // private readonly todoByUserIndex = process.env.TODOS_BY_USER_INDEX,
+    private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET,
     private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION,
     private readonly s3 = new XAWS.S3({ signatureVersion: "v4" })
   ) {}
 
   async getTodosForUser(userId: string): Promise<TodoItem[]> {
     logger.info("Getting all todos", { userId });
+
     const result = await this.docClient
       .query({
         TableName: this.todoTable,
-        IndexName: this.todoByUserIndex,
         KeyConditionExpression: "userId = :userId",
         ExpressionAttributeValues: {
           ":userId": userId,
@@ -53,7 +53,6 @@ export class TodoAccess {
     };
 
     logger.info("Storing new item: ", newItem);
-    this.docClient.delete;
     await this.docClient
       .put({
         TableName: this.todoTable,

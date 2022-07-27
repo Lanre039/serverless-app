@@ -27,7 +27,7 @@ provider:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     TODOS_BY_USER_INDEX: UserTodoIndex
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: project-c4-todo-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
 custom:
@@ -204,7 +204,7 @@ functions:
       - Effect: Allow
         Action:
           - s3:DeleteObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}
+        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -234,7 +234,7 @@ functions:
       - Effect: Allow
         Action:
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}
+        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
@@ -328,7 +328,7 @@ resources:
                 - HEAD
               MaxAge: 3000
 
-    # TODO: Complete the policy below and attach it to the bucket defined above
+    # TODO-DONE: Complete the policy below and attach it to the bucket defined above
     # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
@@ -341,5 +341,5 @@ resources:
               Effect: Allow
               Principal: "*"
               Action: "s3:GetObject"
-              Resource: "arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}"
+              Resource: "arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*"
         Bucket: !Ref AttachmentsBucket
